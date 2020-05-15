@@ -1,5 +1,6 @@
 package com.compulsory.crudrestapi.model;
 
+import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,6 +16,7 @@ import java.util.List;
 @Document(collection = "Game")
 public class Game {
     @Id
+    @Generated
     private Integer id;
     private List<Player> players;
     private Player winner;

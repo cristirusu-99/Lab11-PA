@@ -15,7 +15,7 @@ public class GameController {
     private GameRepository gameRepository;
 
     @PostMapping("/addGame")
-    public String saveGame(Game game) {
+    public String saveGame(@RequestBody Game game) {
         gameRepository.save(game);
         return "Saved game with ID:" + game.getId();
     }
@@ -32,7 +32,11 @@ public class GameController {
 
     @DeleteMapping("/delete/{id}")
     public String deleteGameByID(@PathVariable String id) {
-        gameRepository.deleteById(Integer.parseInt(id));
-        return "Deleted game with ID:" + id;
+        if (!gameRepository.existsById(Integer.parseInt(id))) {
+            return "No game with this ID to be deleted";
+        } else {
+            gameRepository.deleteById(Integer.parseInt(id));
+            return "Deleted game with ID:" + id;
+        }
     }
 }
