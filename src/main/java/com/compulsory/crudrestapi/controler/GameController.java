@@ -16,7 +16,7 @@ public class GameController {
 
     @PostMapping("/addGame")
     public String saveGame(@RequestBody Game game) {
-        if (gameRepository.existsById(game.getId())) {
+        if (game.getId() != null && gameRepository.existsById(game.getId())) {
             return "A game with this ID already exists. Try modifying it instead.";
         } else {
             gameRepository.insert(game);
@@ -41,15 +41,15 @@ public class GameController {
 
     @GetMapping("/findGames/{id}")
     public Optional<Game> getGameByID(@PathVariable String id) {
-        return gameRepository.findById(Integer.parseInt(id));
+        return gameRepository.findById(id);
     }
 
     @DeleteMapping("/deleteGames/{id}")
     public String deleteGameByID(@PathVariable String id) {
-        if (!gameRepository.existsById(Integer.parseInt(id))) {
+        if (!gameRepository.existsById(id)) {
             return "No game with this ID to be deleted.";
         } else {
-            gameRepository.deleteById(Integer.parseInt(id));
+            gameRepository.deleteById(id);
             return "Deleted game with ID:" + id;
         }
     }

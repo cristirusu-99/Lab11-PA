@@ -15,7 +15,7 @@ public class PlayerController {
 
     @PostMapping("/addPlayer")
     public String savePlayer(@RequestBody Player player) {
-        if (playerRepository.existsById(player.getId())) {
+        if (player.getId() != null && playerRepository.existsById(player.getId())) {
             return "A player with this ID already exists. Try modifying it instead.";
         } else {
             playerRepository.insert(player);
@@ -40,15 +40,15 @@ public class PlayerController {
 
     @GetMapping("/findPlayers/{id}")
     public Optional<Player> getPlayerByID(@PathVariable String id) {
-        return playerRepository.findById(Integer.parseInt(id));
+        return playerRepository.findById(id);
     }
 
     @DeleteMapping("/deletePlayers/{id}")
     public String deletePlayerByID(@PathVariable String id) {
-        if (!playerRepository.existsById(Integer.parseInt(id))) {
+        if (!playerRepository.existsById(id)) {
             return "No player with this ID to be deleted.";
         } else {
-            playerRepository.deleteById(Integer.parseInt(id));
+            playerRepository.deleteById(id);
             return "Deleted player with ID:" + id;
         }
     }

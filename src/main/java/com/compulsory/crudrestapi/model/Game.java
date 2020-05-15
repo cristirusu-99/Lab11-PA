@@ -17,7 +17,7 @@ import java.util.List;
 public class Game {
     @Id
     @Generated
-    private Integer id;
+    private String id;
     private List<Player> players;
     private Player winner;
 }
