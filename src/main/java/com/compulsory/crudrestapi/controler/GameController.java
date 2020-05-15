@@ -16,8 +16,22 @@ public class GameController {
 
     @PostMapping("/addGame")
     public String saveGame(@RequestBody Game game) {
-        gameRepository.save(game);
-        return "Saved game with ID:" + game.getId();
+        if (gameRepository.existsById(game.getId())) {
+            return "A game with this ID already exists. Try modifying it instead.";
+        } else {
+            gameRepository.insert(game);
+            return "Added game with ID: " + game.getId();
+        }
+    }
+
+    @PutMapping("/modifyGame/")
+    public String editGame(@RequestBody Game game) {
+        if (!gameRepository.existsById(game.getId())) {
+            return "No game with this ID to be modified. Try adding it instead.";
+        } else {
+            gameRepository.save(game);
+            return "Altered game with ID: " + game.getId();
+        }
     }
 
     @GetMapping("/findGames")
@@ -30,10 +44,10 @@ public class GameController {
         return gameRepository.findById(Integer.parseInt(id));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/deleteGames/{id}")
     public String deleteGameByID(@PathVariable String id) {
         if (!gameRepository.existsById(Integer.parseInt(id))) {
-            return "No game with this ID to be deleted";
+            return "No game with this ID to be deleted.";
         } else {
             gameRepository.deleteById(Integer.parseInt(id));
             return "Deleted game with ID:" + id;

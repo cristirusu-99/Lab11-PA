@@ -1,6 +1,5 @@
 package com.compulsory.crudrestapi.controler;
 
-import com.compulsory.crudrestapi.model.Game;
 import com.compulsory.crudrestapi.model.Player;
 import com.compulsory.crudrestapi.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,22 @@ public class PlayerController {
 
     @PostMapping("/addPlayer")
     public String savePlayer(@RequestBody Player player) {
-        playerRepository.save(player);
-        return "Saved player with ID:" + player.getId();
+        if (playerRepository.existsById(player.getId())) {
+            return "A player with this ID already exists. Try modifying it instead.";
+        } else {
+            playerRepository.insert(player);
+            return "Added player with ID: " + player.getId();
+        }
+    }
+
+    @PutMapping("/modifyPlayer/")
+    public String editPlayer(@RequestBody Player player) {
+        if (!playerRepository.existsById(player.getId())) {
+            return "No player with this ID to be modified. Try adding it instead.";
+        } else {
+            playerRepository.save(player);
+            return "Altered player with ID: " + player.getId();
+        }
     }
 
     @GetMapping("/findPlayers")
